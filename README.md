@@ -1,6 +1,14 @@
-# Getting Started with Create React App
+# Getting Started
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+Start the backend first - https://github.com/Vrutik21/TrackNTrust-Backend
+
+Follow the steps in the Readme.md file in the Backend project structure
+
+After starting the Backend,
+
+Do the following in the Frontend -
 
 Install node modules
 
@@ -11,6 +19,8 @@ Install node modules
 In the project directory, you can run:
 
 ### `npm run start`
+
+Optional commands -
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
