@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./style.scss";
+import "./front_page.css";
 import ProductDetails from "./ProductDetail";
 import OrderHistory from "./OrderHistory";
 import OrderProducts from "./OrderProducts";
@@ -11,14 +12,22 @@ import Locker from "./Locker";
 import PurchaseOrderDetail from "./PurchaseOrderDetail";
 import LockerDetail from "./LockerDetail";
 import MapComponent from "./MapsGoogle";
+import LoginPage from "./LoginPage";
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route exact path="/login" element={<LoginPage />} />
+        {/* <Route path="/login-page" element={<LoginPage />} /> */}
+        <Route path="/users" element={<Users />} />
         <Route exact path="/" element={<ProductDetails />} />
         <Route path="/purchase-orders" element={<PurchaseOrder />} />
         <Route path="/purchase-orders/:id" element={<PurchaseOrderDetail />} />
+        <Route
+          path="/purchase-orders/products/:id"
+          element={<OrderProducts />}
+        />
         <Route
           path="/purchase-orders/products/:id"
           element={<OrderProducts />}
