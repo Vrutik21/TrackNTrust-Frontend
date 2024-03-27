@@ -11,7 +11,14 @@ const Customer = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/customer");
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/customer`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "69420",
+            },
+          }
+        );
         setResponseData(response.data);
       } catch (error) {
         console.error("Error fetching product data:", error);

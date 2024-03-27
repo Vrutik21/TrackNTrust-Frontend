@@ -13,7 +13,12 @@ const OrderHistory = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/purchase-order/${id}`
+          `${process.env.REACT_APP_BACKEND_URL}/purchase-order/${id}`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "69420",
+            },
+          }
         );
         setResponseData(response.data?.order_history);
       } catch (error) {

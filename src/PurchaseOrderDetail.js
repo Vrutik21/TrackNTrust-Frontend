@@ -27,7 +27,12 @@ const PurchaseOrderDetail = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/purchase-order/${id}`
+        `${process.env.REACT_APP_BACKEND_URL}/purchase-order/${id}`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
       );
       setResponseData(response.data);
     } catch (error) {
@@ -76,7 +81,12 @@ const PurchaseOrderDetail = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/purchase-order/${id}`
+          `${process.env.REACT_APP_BACKEND_URL}/purchase-order/${id}`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "69420",
+            },
+          }
         );
         const data = response.data;
         setOrderData(data);
@@ -103,15 +113,30 @@ const PurchaseOrderDetail = () => {
       const currentLocation = await getLocation();
       setShowForm(false);
 
-      await axios.patch(`http://localhost:3001/purchase-order/${formData.id}`, {
-        status: formData.status.value,
-        user_id: "d4eb0faf-294c-4454-872a-a8bb5a38529a",
-        loc_lat: currentLocation.latitude,
-        loc_lon: currentLocation.longitude,
-        description: formData.description,
-      });
+      await axios.patch(
+        `${process.env.REACT_APP_BACKEND_URL}/purchase-order/${formData.id}`,
+        {
+          status: formData.status.value,
+          user_id: "d4eb0faf-294c-4454-872a-a8bb5a38529a",
+          loc_lat: currentLocation.latitude,
+          loc_lon: currentLocation.longitude,
+          description: formData.description,
+        },
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
-      const response = await axios.get("http://localhost:3001/purchase-order");
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/purchase-order`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
       const data = response.data;
       setResponseData(data);
       setFormData(null);
