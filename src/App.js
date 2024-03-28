@@ -20,6 +20,10 @@ function App() {
         <Route path="/purchase-orders" element={<PurchaseOrder />} />
         <Route path="/purchase-orders/:id" element={<PurchaseOrderDetail />} />
         <Route
+          path="/customers/:customerId/orders"
+          element={<PurchaseOrder />}
+        />
+        <Route
           path="/purchase-orders/products/:id"
           element={<OrderProducts />}
         />

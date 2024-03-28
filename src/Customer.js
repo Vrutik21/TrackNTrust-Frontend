@@ -214,7 +214,16 @@ const Customer = () => {
                   <div className="product-cell price">
                     <span className="cell-label">Price:</span>
                     <a href="#" style={{ color: "white" }}>
-                      view orders({item.orders.length})
+                      <Link to={`/customers/${item.id}/orders`}>
+                        <div
+                          style={{
+                            color: "white",
+                            textDecoration: "underline",
+                          }}
+                        >
+                          view orders({item.orders.length})
+                        </div>
+                      </Link>
                     </a>
                   </div>
                   <div className="product-cell stock">

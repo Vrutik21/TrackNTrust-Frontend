@@ -3,7 +3,7 @@ import { formatDateTime, trimStatus } from "./shared/helper";
 import Sidebar from "./Sidebar";
 import axios from "axios";
 import SearchFilter from "./SearchFilter";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
 
@@ -22,26 +22,43 @@ const PurchaseOrder = () => {
     status: { value: "", label: "" },
     description: "",
   });
+  const { customerId } = useParams();
 
   const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/purchase-order`,
-        {
-          headers: {
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      );
-      setResponseData(response.data);
-    } catch (error) {
-      console.error("Error fetching product data:", error);
+    if (customerId) {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/customer/${customerId}`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "69420",
+            },
+          }
+        );
+        setResponseData(response.data.orders);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    } else {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/purchase-order`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "69420",
+            },
+          }
+        );
+        setResponseData(response.data);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [customerId]);
 
   const options = [
     { value: "initiated", label: "Initiated" },
@@ -523,7 +540,7 @@ const PurchaseOrder = () => {
                       <div
                         style={{ color: "white", textDecoration: "underline" }}
                       >
-                        Products({item.order_entries.length})
+                        Products({item.order_entries?.length ?? 0})
                       </div>
                     </Link>
                   </div>
@@ -537,7 +554,7 @@ const PurchaseOrder = () => {
                       <div
                         style={{ color: "white", textDecoration: "underline" }}
                       >
-                        History({item.order_history.length})
+                        History({item.order_history?.length ?? 0})
                       </div>
                     </Link>
                   </div>
@@ -561,11 +578,20 @@ const PurchaseOrder = () => {
                       <div> - </div>
                     )}
                   </div>
-                  <div className="product-cell price">
+                  <div
+                    className="product-cell price"
+                    style={{ display: "flex", gap: "10px" }}
+                  >
                     <img
                       src="./Group.svg"
                       alt="edit icon"
                       style={{ width: "20%", cursor: "pointer" }}
+                      onClick={() => onEditClick(item.id)}
+                    />
+                    <img
+                      src="./delete.svg"
+                      alt="edit icon"
+                      style={{ width: "15%", cursor: "pointer" }}
                       onClick={() => onEditClick(item.id)}
                     />
                   </div>

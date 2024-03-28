@@ -9,7 +9,8 @@ import Select from "react-select";
 
 const PurchaseOrderDetail = () => {
   const [responseData, setResponseData] = useState();
-  let { id } = useParams();
+  let { id, customerId } = useParams();
+
   const {
     handleSubmit,
     formState: { errors },
