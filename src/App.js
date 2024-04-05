@@ -11,6 +11,7 @@ import Locker from "./Locker";
 import PurchaseOrderDetail from "./PurchaseOrderDetail";
 import LockerDetail from "./LockerDetail";
 import MapComponent from "./MapsGoogle";
+import CustomerPreference from "./CustomerPreference";
 
 function App() {
   return (
@@ -35,7 +36,14 @@ function App() {
         <Route path="/customers" element={<Customer />} />
         <Route path="/lockers" element={<Locker />} />
         <Route path="/lockers/:id" element={<LockerDetail />} />
-        <Route path="/maps/:latitude/:longitude" element={<MapComponent />} />
+        <Route
+          path="/maps/:latitude/:longitude/:radius?"
+          element={<MapComponent />}
+        />
+        <Route
+          path="/customer/preference/:orderId"
+          element={<CustomerPreference />}
+        />
       </Routes>
     </Router>
   );

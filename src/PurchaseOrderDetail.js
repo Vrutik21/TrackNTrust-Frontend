@@ -53,8 +53,8 @@ const PurchaseOrderDetail = () => {
     { value: "ready_for_dispatch", label: "Ready For Dispatch" },
     { value: "out_for_delivery", label: "Out For Delivery" },
     { value: "delivered_to_customer", label: "Delivered To Customer" },
-    { value: "locker_assigned", label: "Locker Assigned" },
-    { value: "delivered_to_locker", label: "Delivered To Locker" },
+    // { value: "locker_assigned", label: "Locker Assigned" },
+    // { value: "delivered_to_locker", label: "Delivered To Locker" },
     { value: "cancelled", label: "Cancelled" },
   ];
 

@@ -6,6 +6,8 @@ import SearchFilter from "./SearchFilter";
 import { Link, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
+import CustomerOrderForm from "./CreatePurchaseOrder";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 
 const PurchaseOrder = () => {
   const {
@@ -17,11 +19,14 @@ const PurchaseOrder = () => {
   const [responseData, setResponseData] = useState([]);
   const [orderData, setOrderData] = useState({});
   const [showForm, setShowForm] = useState(false);
+  const [showCreateForm, setCreateShowForm] = useState(false);
   const [formData, setFormData] = useState({
     id: orderData.id || "",
     status: { value: "", label: "" },
     description: "",
   });
+  const [customerData, setCustomerData] = useState([]);
+  const [productData, setProductData] = useState([]);
   const { customerId } = useParams();
 
   const fetchData = async () => {
@@ -58,6 +63,8 @@ const PurchaseOrder = () => {
 
   useEffect(() => {
     fetchData();
+    getCustomerData();
+    getProductsData();
   }, [customerId]);
 
   const options = [
@@ -67,9 +74,10 @@ const PurchaseOrder = () => {
     { value: "reached_facility", label: "Reached Facility" },
     { value: "ready_for_dispatch", label: "Ready For Dispatch" },
     { value: "out_for_delivery", label: "Out For Delivery" },
+    { value: "failed_to_deliver", label: "Failed to Deliver" },
     { value: "delivered_to_customer", label: "Delivered To Customer" },
-    { value: "locker_assigned", label: "Locker Assigned" },
-    { value: "delivered_to_locker", label: "Delivered To Locker" },
+    // { value: "locker_assigned", label: "Locker Assigned" },
+    // { value: "delivered_to_locker", label: "Delivered To Locker" },
     { value: "cancelled", label: "Cancelled" },
   ];
 
@@ -181,8 +189,102 @@ const PurchaseOrder = () => {
     setShowForm(false);
   };
 
+  const getCustomerData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/customer`
+      );
+
+      setCustomerData(response.data);
+    } catch (err) {
+      console.log(err, "Error fetching Customer Data");
+    }
+  };
+
+  const getProductsData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/product`
+      );
+
+      setProductData(response.data);
+    } catch (err) {
+      console.log(err, "Error fetching Customer Data");
+    }
+  };
+
+  const handleCreateOrder = async (formData) => {
+    try {
+      // Handle form submission logic here
+      console.log("Order created with data:", formData);
+
+      const currentLocation = await getLocation();
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/purchase-order`,
+        {
+          customer_id: formData?.customer_id,
+          user_id: "7c5ff3fa-dd39-4675-8624-d11f62db88d5",
+          loc_lat: currentLocation.latitude,
+          loc_lon: currentLocation.longitude,
+          order_entries: formData?.order_entries,
+        }
+      );
+
+      if (response) {
+        toast.success("Purchase Order Created", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+
+      fetchData();
+
+      setCreateShowForm(false);
+    } catch (err) {
+      toast.error(err.response.data.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  };
+
   return (
-    <div className="app-container">
+    <div
+      className="app-container"
+      style={{
+        overflowY: "auto",
+        maxHeight: "100vh",
+        width: "100%",
+      }}
+    >
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
       {/* Sidebar */}
       <Sidebar />
       <div className="app-content">
@@ -203,10 +305,16 @@ const PurchaseOrder = () => {
               <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
             </svg>
           </button>
-          <button className="app-content-headerButton">Add Order</button>
+          <button
+            className="app-content-headerButton"
+            onClick={() => setCreateShowForm(true)}
+          >
+            Add Order
+          </button>
         </div>
         {/* search and filter functionality */}
         <SearchFilter />
+
         {/* Popup Form */}
         {showForm && (
           <div className="popup-form-overlay">
@@ -296,6 +404,20 @@ const PurchaseOrder = () => {
               </form>
             </div>
           </div>
+        )}
+        {showCreateForm && (
+          <CustomerOrderForm
+            products={productData.map(({ id, name }) => {
+              return { id, name };
+            })}
+            customers={customerData.map(({ name, id }) => {
+              return { label: name, value: id };
+            })}
+            onSubmit={handleCreateOrder}
+            onCancel={() => {
+              setCreateShowForm(false);
+            }}
+          />
         )}
         <div className="products-area-wrapper tableView">
           <div className="products-header">
@@ -459,7 +581,7 @@ const PurchaseOrder = () => {
                 </svg>
               </button>
             </div>
-            <div className="product-cell price">
+            {/* <div className="product-cell price">
               Locker
               <button className="sort-button">
                 <svg
@@ -474,7 +596,7 @@ const PurchaseOrder = () => {
                   />
                 </svg>
               </button>
-            </div>
+            </div> */}
             <div className="product-cell price">
               Actions
               <button className="sort-button">
@@ -562,7 +684,7 @@ const PurchaseOrder = () => {
                     <span className="cell-label"></span>
                     {item.delivery_attempts}
                   </div>
-                  <div className="product-cell price">
+                  {/* <div className="product-cell price">
                     {item.is_locker_used ? (
                       <Link to={`/lockers/${item.locker.id}`}>
                         <div
@@ -577,7 +699,7 @@ const PurchaseOrder = () => {
                     ) : (
                       <div> - </div>
                     )}
-                  </div>
+                  </div> */}
                   <div
                     className="product-cell price"
                     style={{ display: "flex", gap: "10px" }}
@@ -588,12 +710,12 @@ const PurchaseOrder = () => {
                       style={{ width: "20%", cursor: "pointer" }}
                       onClick={() => onEditClick(item.id)}
                     />
-                    <img
+                    {/* <img
                       src="./delete.svg"
                       alt="edit icon"
                       style={{ width: "15%", cursor: "pointer" }}
                       onClick={() => onEditClick(item.id)}
-                    />
+                    /> */}
                   </div>
                 </div>
               ))

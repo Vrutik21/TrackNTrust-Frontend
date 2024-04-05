@@ -198,7 +198,7 @@ const Sidebar = () => {
             </div>
           </li>
         </NavLink>
-        <NavLink to="/lockers">
+        {/* <NavLink to="/lockers">
           <li
             className={`sidebar-list-item ${
               location.pathname === "/lockers" ? "active" : ""
@@ -223,7 +223,7 @@ const Sidebar = () => {
               Lockers
             </div>
           </li>
-        </NavLink>
+        </NavLink> */}
         <NavLink to="/notificatons">
           <li
             className={`sidebar-list-item ${
