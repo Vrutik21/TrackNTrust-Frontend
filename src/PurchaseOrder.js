@@ -299,14 +299,7 @@ const PurchaseOrder = () => {
   };
 
   return (
-    <div
-      className="app-container"
-      style={{
-        overflowY: "auto",
-        maxHeight: "100vh",
-        width: "100%",
-      }}
-    >
+    <div className="app-container">
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -454,7 +447,10 @@ const PurchaseOrder = () => {
             }}
           />
         )}
-        <div className="products-area-wrapper tableView">
+        <div
+          className="products-area-wrapper tableView"
+          style={{ overflowY: "auto" }}
+        >
           <div className="products-header">
             <div className="product-cell image">
               Order#
@@ -616,6 +612,22 @@ const PurchaseOrder = () => {
                 </svg>
               </button>
             </div>
+            <div className="product-cell price">
+              Delivery Preference
+              <button className="sort-button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z"
+                  />
+                </svg>
+              </button>
+            </div>
             {/* <div className="product-cell price">
               Locker
               <button className="sort-button">
@@ -649,77 +661,105 @@ const PurchaseOrder = () => {
               </button>
             </div>
           </div>
-          {Array.isArray(responseData)
-            ? responseData?.map((item, index) => (
-                <div className="products-row" key={index}>
-                  <div className="product-cell image">{index + 1}</div>
-                  <div className="product-cell category">
-                    <span className="cell-label"></span>
-                    {formatDateTime(item.created_at)}
-                  </div>
-                  <div className="product-cell status-cell">
-                    <span className="cell-label"></span>
-                    {formatDateTime(item.updated_at)}
-                  </div>
-                  <div className="product-cell sales">
-                    <span className="cell-label"></span>
-                    {trimStatus(item.status)}
-                  </div>
-                  <div className="product-cell stock">
-                    <span className="cell-label"></span>
-                    <Link
-                      to={`/maps/${item.loc_lat}/${item.loc_lon}`}
-                      target="_blank"
-                    >
-                      <div
-                        style={{
-                          color: "white",
-                          textDecoration: "underline",
-                        }}
+          <div className="table-body">
+            {Array.isArray(responseData)
+              ? responseData?.map((item, index) => (
+                  <div className="products-row" key={index}>
+                    <div className="product-cell image">{index + 1}</div>
+                    <div className="product-cell category">
+                      <span className="cell-label"></span>
+                      {formatDateTime(item.created_at)}
+                    </div>
+                    <div className="product-cell status-cell">
+                      <span className="cell-label"></span>
+                      {formatDateTime(item.updated_at)}
+                    </div>
+                    <div className="product-cell sales">
+                      <span className="cell-label"></span>
+                      {trimStatus(item.status)}
+                    </div>
+                    <div className="product-cell stock">
+                      <span className="cell-label"></span>
+                      <Link
+                        to={`/maps/${item.loc_lat}/${item.loc_lon}`}
+                        target="_blank"
                       >
-                        view location
-                      </div>
-                    </Link>
-                  </div>
-                  <div className="product-cell price">
-                    <span className="cell-label"></span>
-                    <Link to={`/purchase-orders/customer/${item.id}`}>
-                      <div
-                        style={{ color: "white", textDecoration: "underline" }}
-                      >
-                        {item.customer.name}
-                      </div>
-                    </Link>
-                  </div>
-                  <div className="product-cell price">
-                    <span className="cell-label"></span>
-                    <Link to={`/purchase-orders/products/${item.id}`}>
-                      <div
-                        style={{ color: "white", textDecoration: "underline" }}
-                      >
-                        Products({item.order_entries?.length ?? 0})
-                      </div>
-                    </Link>
-                  </div>
-                  <div className="product-cell price">
-                    <span className="cell-label"></span>
-                    {item.total_weight}
-                  </div>
-                  <div className="product-cell price">
-                    <span className="cell-label"></span>
-                    <Link to={`/purchase-orders/history/${item.id}`}>
-                      <div
-                        style={{ color: "white", textDecoration: "underline" }}
-                      >
-                        History({item.order_history?.length ?? 0})
-                      </div>
-                    </Link>
-                  </div>
-                  <div className="product-cell price">
-                    <span className="cell-label"></span>
-                    {item.delivery_attempts}
-                  </div>
-                  {/* <div className="product-cell price">
+                        <div
+                          style={{
+                            color: "white",
+                            textDecoration: "underline",
+                          }}
+                        >
+                          view location
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="product-cell price">
+                      <span className="cell-label"></span>
+                      <Link to={`/purchase-orders/customer/${item.id}`}>
+                        <div
+                          style={{
+                            color: "white",
+                            textDecoration: "underline",
+                          }}
+                        >
+                          {item.customer.name}
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="product-cell price">
+                      <span className="cell-label"></span>
+                      <Link to={`/purchase-orders/products/${item.id}`}>
+                        <div
+                          style={{
+                            color: "white",
+                            textDecoration: "underline",
+                          }}
+                        >
+                          Products({item.order_entries?.length ?? 0})
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="product-cell price">
+                      <span className="cell-label"></span>
+                      {item.total_weight}
+                    </div>
+                    <div className="product-cell price">
+                      <span className="cell-label"></span>
+                      <Link to={`/purchase-orders/history/${item.id}`}>
+                        <div
+                          style={{
+                            color: "white",
+                            textDecoration: "underline",
+                          }}
+                        >
+                          History({item.order_history?.length ?? 0})
+                        </div>
+                      </Link>
+                    </div>
+
+                    <div className="product-cell price">
+                      <span className="cell-label"></span>
+                      {item.delivery_attempts}
+                    </div>
+                    <div className="product-cell price">
+                      <span className="cell-label"></span>
+                      {item?.preference ? (
+                        <Link to={`/purchase-orders/preference/${item.id}`}>
+                          <div
+                            style={{
+                              color: "white",
+                              textDecoration: "underline",
+                            }}
+                          >
+                            view preference
+                          </div>
+                        </Link>
+                      ) : (
+                        <span>-</span>
+                      )}
+                    </div>
+                    {/* <div className="product-cell price">
                     {item.is_locker_used ? (
                       <Link to={`/lockers/${item.locker.id}`}>
                         <div
@@ -735,26 +775,27 @@ const PurchaseOrder = () => {
                       <div> - </div>
                     )}
                   </div> */}
-                  <div
-                    className="product-cell price"
-                    style={{ display: "flex", gap: "10px" }}
-                  >
-                    <img
-                      src="./Group.svg"
-                      alt="edit icon"
-                      style={{ width: "20%", cursor: "pointer" }}
-                      onClick={() => onEditClick(item.id)}
-                    />
-                    {/* <img
+                    <div
+                      className="product-cell price"
+                      style={{ display: "flex", gap: "10px" }}
+                    >
+                      <img
+                        src="./Group.svg"
+                        alt="edit icon"
+                        style={{ width: "20%", cursor: "pointer" }}
+                        onClick={() => onEditClick(item.id)}
+                      />
+                      {/* <img
                       src="./delete.svg"
                       alt="edit icon"
                       style={{ width: "15%", cursor: "pointer" }}
                       onClick={() => onEditClick(item.id)}
                     /> */}
+                    </div>
                   </div>
-                </div>
-              ))
-            : null}
+                ))
+              : null}
+          </div>
         </div>
       </div>
     </div>

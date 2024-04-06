@@ -154,7 +154,6 @@ const Sidebar = () => {
             </div>
           </li>
         </NavLink>
-
         <NavLink to="/purchase-orders">
           <li
             className={`sidebar-list-item ${

@@ -235,7 +235,7 @@ const Customer = () => {
                   <div className="product-cell stock">
                     <span className="cell-label"></span>
                     <Link
-                      to={`/maps/${item.geofence_areas.loc_lat}/${item.geofence_areas.loc_lon}/${item.geofence_areas.radius}`}
+                      to={`/maps/${item.geofence_areas?.loc_lat}/${item.geofence_areas?.loc_lon}/${item.geofence_areas?.radius}`}
                       target="_blank"
                     >
                       <div
@@ -244,7 +244,7 @@ const Customer = () => {
                           textDecoration: "underline",
                         }}
                       >
-                        view area ({item.geofence_areas.radius})
+                        view area ({item.geofence_areas?.radius})
                       </div>
                     </Link>
                   </div>

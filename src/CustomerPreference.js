@@ -46,6 +46,7 @@ const CustomerPreference = () => {
   const { handleSubmit, control, reset } = useForm();
   const { orderId } = useParams();
   const [orderData, setOrderData] = useState();
+  const [showThanks, setShowThanks] = useState(false);
 
   const getOrderDetails = async () => {
     try {
@@ -94,6 +95,8 @@ const CustomerPreference = () => {
           theme: "light",
           transition: Bounce,
         });
+
+        setShowThanks(true);
       }
     } catch (err) {
       console.log(
@@ -121,6 +124,7 @@ const CustomerPreference = () => {
   const onSubmit = (data) => {
     console.log(data);
     console.log(new Date(data.preferredDate).toISOString());
+    reset();
     upsertCustomerPreference(data.timeRange, data.preferredDate);
   };
 
@@ -169,128 +173,159 @@ const CustomerPreference = () => {
               }}
             >
               <Box p={3}>
-                <Typography variant="h4" align="center" gutterBottom>
-                  Set Your Delivery Preference
-                </Typography>
-                <Typography
-                  variant="body1"
-                  align="center"
-                  style={{ marginBottom: "20px" }}
-                >
-                  Hello {orderData?.customer.name}, We made two delivery
-                  attempts to your location but failed to deliver it. You can
-                  set your preference for the next delivery for your order #
-                  {orderData?.order_code}.
-                </Typography>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <Grid
-                    container
-                    spacing={5}
-                    direction="column"
-                    justifyItems={"center"}
-                    alignContent={"center"}
-                  >
-                    <Grid item>
-                      <FormControl fullWidth variant="outlined">
-                        <InputLabel id="time-range-label">
-                          Preferred Time Range
-                        </InputLabel>
-                        <Controller
-                          name="timeRange"
-                          control={control}
-                          defaultValue=""
-                          render={({ field }) => (
-                            <Select
-                              {...field}
-                              labelId="time-range-label"
-                              label="Preferred Time Range"
-                            >
-                              {timeOptions.map((option) => (
-                                <MenuItem
-                                  key={option.value}
-                                  value={option.value}
+                {!showThanks && (
+                  <>
+                    <Typography variant="h4" align="center" gutterBottom>
+                      Set Your Delivery Preference
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      align="center"
+                      style={{ marginBottom: "20px" }}
+                    >
+                      Hello {orderData?.customer.name}, We made two delivery
+                      attempts to your location but failed to deliver it. You
+                      can set your preference for the next delivery for your
+                      order #{orderData?.order_code}.
+                    </Typography>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <Grid
+                        container
+                        spacing={5}
+                        direction="column"
+                        justifyItems={"center"}
+                        alignContent={"center"}
+                      >
+                        <Grid item>
+                          <FormControl fullWidth variant="outlined">
+                            <InputLabel id="time-range-label">
+                              Preferred Time Range
+                            </InputLabel>
+                            <Controller
+                              name="timeRange"
+                              control={control}
+                              defaultValue=""
+                              render={({ field }) => (
+                                <Select
+                                  {...field}
+                                  labelId="time-range-label"
+                                  label="Preferred Time Range"
                                 >
-                                  {option.label}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          )}
-                        />
-                      </FormControl>
-                    </Grid>
-                    <Grid item>
-                      <Controller
-                        name="preferredDate"
-                        control={control}
-                        defaultValue={null}
-                        render={({ field }) => (
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                              {...field}
-                              disablePast
-                              shouldDisableDate={(day) => {
-                                const today = dayjs();
-                                const maxDate15DaysLater = today.add(20, "day");
-
-                                // Disable today and dates up to 2 days after today
-                                if (
-                                  dayjs(day).isSame(today.add(2, "day"), "day")
-                                ) {
-                                  return true;
-                                }
-
-                                if (
-                                  dayjs(day).isBefore(
-                                    today.add(2, "day"),
-                                    "day"
-                                  )
-                                ) {
-                                  return true;
-                                }
-
-                                // Enable dates up to 15 days after today
-                                if (
-                                  dayjs(day).isBefore(maxDate15DaysLater, "day")
-                                ) {
-                                  return false;
-                                }
-
-                                // Disable all future dates after 15 days
-                                return true;
-                              }}
-                              // fullWidth
-                              label="Preferred Date"
-                              inputVariant="outlined"
-                              format="DD/MM/YYYY"
-                              renderInput={(params) => (
-                                <TextField {...params} />
+                                  {timeOptions.map((option) => (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </MenuItem>
+                                  ))}
+                                </Select>
                               )}
-                              style={{ color: blue[500] }}
                             />
-                          </LocalizationProvider>
-                        )}
-                      />
-                    </Grid>
-                    <Grid item align="center">
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        style={{ marginRight: "10px" }}
-                      >
-                        Submit
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outlined"
-                        color="primary"
-                        onClick={handleClear}
-                      >
-                        Clear
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </form>
+                          </FormControl>
+                        </Grid>
+                        <Grid item>
+                          <Controller
+                            name="preferredDate"
+                            control={control}
+                            defaultValue={null}
+                            render={({ field }) => (
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                  {...field}
+                                  disablePast
+                                  shouldDisableDate={(day) => {
+                                    const today = dayjs();
+                                    const maxDate15DaysLater = today.add(
+                                      20,
+                                      "day"
+                                    );
+
+                                    // Disable today and dates up to 2 days after today
+                                    if (
+                                      dayjs(day).isSame(
+                                        today.add(2, "day"),
+                                        "day"
+                                      )
+                                    ) {
+                                      return true;
+                                    }
+
+                                    if (
+                                      dayjs(day).isBefore(
+                                        today.add(2, "day"),
+                                        "day"
+                                      )
+                                    ) {
+                                      return true;
+                                    }
+
+                                    // Enable dates up to 15 days after today
+                                    if (
+                                      dayjs(day).isBefore(
+                                        maxDate15DaysLater,
+                                        "day"
+                                      )
+                                    ) {
+                                      return false;
+                                    }
+
+                                    // Disable all future dates after 15 days
+                                    return true;
+                                  }}
+                                  // fullWidth
+                                  label="Preferred Date"
+                                  inputVariant="outlined"
+                                  format="DD/MM/YYYY"
+                                  renderInput={(params) => (
+                                    <TextField {...params} />
+                                  )}
+                                  style={{ color: blue[500] }}
+                                />
+                              </LocalizationProvider>
+                            )}
+                          />
+                        </Grid>
+                        <Grid item align="center">
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            style={{ marginRight: "10px" }}
+                          >
+                            Submit
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outlined"
+                            color="primary"
+                            onClick={handleClear}
+                          >
+                            Clear
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </form>
+                  </>
+                )}
+                {showThanks && (
+                  <>
+                    <Typography variant="h4" align="center" gutterBottom>
+                      Delivery Preference Added for your Order.
+                      {orderData?.order_code}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      align="center"
+                      style={{ marginBottom: "20px" }}
+                    >
+                      Thank you, {orderData?.customer.name}, your delivery
+                      preference has been set and your Order #
+                      {orderData?.order_code} will be delivered to you at your
+                      desired time and date.
+                    </Typography>
+                  </>
+                )}
               </Box>
             </Paper>
           </Box>

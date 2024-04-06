@@ -20,6 +20,7 @@ import MapComponent from "./MapsGoogle";
 import CustomerPreference from "./CustomerPreference";
 import Login from "./Login";
 import Users from "./Users";
+import OrderPreference from "./OrderPreference";
 
 function App() {
   return (
@@ -30,6 +31,10 @@ function App() {
         <Route path="/users" element={<Users />} />
         <Route path="/purchase-orders/:userId?" element={<PurchaseOrder />} />
         <Route path="/purchase-orders/:id" element={<PurchaseOrderDetail />} />
+        <Route
+          path="/purchase-orders/preference/:orderId?"
+          element={<OrderPreference />}
+        />
         <Route
           path="/customers/:customerId/orders"
           element={<PurchaseOrder />}

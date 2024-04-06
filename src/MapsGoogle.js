@@ -80,54 +80,52 @@ const MapComponent = () => {
   };
 
   return (
-    data_driver.length > 0 && (
-      // <LoadScript googleMapsApiKey={process.env.REACT_APP_MAPS_KEYS}>
-      // <Map
-      //   center={{ lat, lng }}
-      //   zoom={15}
-      //   places={[data, data_driver]}
-      //   googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_MAPS_KEYS}`}
-      //   // loadingElement={<div style={{ height: 100 }} />}
-      //   // containerElement={<div style={{ height: "800px" }} />}
-      //   // mapElement={<div style={{ height: 100 }} />}
-      // />
-      // </LoadScript>
-      <LoadScript googleMapsApiKey={process.env.REACT_APP_MAPS_KEYS}>
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={{ lat, lng }}
-          zoom={16}
-        >
-          <MarkerF position={{ lat, lng }} />
-          {radius && (
-            <CircleF
-              center={{
-                lat,
-                lng,
-              }}
-              radius={Number(radius)}
-              options={radiusOptions}
-              // options={place.circle.options}
-            />
-          )}
-          {radius && (
-            <PolylineF
-              path={data_driver.map((item) => {
-                return {
-                  lat: Number(item.latitude),
-                  lng: Number(item.longitude),
-                };
-              })}
-              options={{
-                strokeColor: "blue",
-                strokeOpacity: 1,
-                strokeWeight: 3,
-              }}
-            />
-          )}
-        </GoogleMap>
-      </LoadScript>
-    )
+    // <LoadScript googleMapsApiKey={process.env.REACT_APP_MAPS_KEYS}>
+    // <Map
+    //   center={{ lat, lng }}
+    //   zoom={15}
+    //   places={[data, data_driver]}
+    //   googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_MAPS_KEYS}`}
+    //   // loadingElement={<div style={{ height: 100 }} />}
+    //   // containerElement={<div style={{ height: "800px" }} />}
+    //   // mapElement={<div style={{ height: 100 }} />}
+    // />
+    // </LoadScript>
+    <LoadScript googleMapsApiKey={process.env.REACT_APP_MAPS_KEYS}>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={{ lat, lng }}
+        zoom={16}
+      >
+        <MarkerF position={{ lat, lng }} />
+        {radius && (
+          <CircleF
+            center={{
+              lat,
+              lng,
+            }}
+            radius={Number(radius)}
+            options={radiusOptions}
+            // options={place.circle.options}
+          />
+        )}
+        {radius && (
+          <PolylineF
+            path={data_driver.map((item) => {
+              return {
+                lat: Number(item.latitude),
+                lng: Number(item.longitude),
+              };
+            })}
+            options={{
+              strokeColor: "blue",
+              strokeOpacity: 1,
+              strokeWeight: 3,
+            }}
+          />
+        )}
+      </GoogleMap>
+    </LoadScript>
   );
 };
 
