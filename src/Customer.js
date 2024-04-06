@@ -3,12 +3,18 @@ import Sidebar from "./Sidebar";
 import axios from "axios";
 import SearchFilter from "./SearchFilter";
 import { formatDateTime } from "./shared/helper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "./shared/userAuth";
 
 const Customer = () => {
   const [responseData, setResponseData] = useState([]);
+  const isAuthenticated = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (isAuthenticated === false) {
+      navigate("/login");
+    }
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -26,7 +32,7 @@ const Customer = () => {
     };
 
     fetchData();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <div className="app-container">

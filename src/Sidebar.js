@@ -1,10 +1,16 @@
 import React, { useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import useAuth from "./shared/userAuth";
 
 const Sidebar = () => {
   const location = useLocation();
+  const isAuthenticated = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (isAuthenticated === false) {
+      navigate("/login");
+    }
     const handleFilterClick = () => {
       const filterMenu = document.querySelector(".filter-menu");
       if (filterMenu) {
@@ -79,7 +85,8 @@ const Sidebar = () => {
         modeSwitch.removeEventListener("click", handleModeSwitchClick);
       }
     };
-  }, [location]);
+  }, [location, isAuthenticated]);
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -93,10 +100,10 @@ const Sidebar = () => {
         </div>
       </div>
       <ul className="sidebar-list">
-        <NavLink to="/home">
+        <NavLink to="/users">
           <li
             className={`sidebar-list-item ${
-              location.pathname === "/home" ? "active" : ""
+              location.pathname === "/users" ? "active" : ""
             }`}
           >
             <div>
@@ -110,12 +117,13 @@ const Sidebar = () => {
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                className="feather feather-home"
+                className="feather feather-shopping-bag"
               >
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
-              Home
+              Users
             </div>
           </li>
         </NavLink>
@@ -146,6 +154,7 @@ const Sidebar = () => {
             </div>
           </li>
         </NavLink>
+
         <NavLink to="/purchase-orders">
           <li
             className={`sidebar-list-item ${
@@ -224,32 +233,6 @@ const Sidebar = () => {
             </div>
           </li>
         </NavLink> */}
-        <NavLink to="/notificatons">
-          <li
-            className={`sidebar-list-item ${
-              location.pathname === "/notifications" ? "active" : ""
-            }`}
-          >
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="feather feather-bell"
-              >
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-              </svg>
-              <span>Notifications</span>
-            </div>
-          </li>
-        </NavLink>
       </ul>
       <div className="account-info">
         <div className="account-info-picture">

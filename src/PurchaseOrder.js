@@ -3,11 +3,12 @@ import { formatDateTime, trimStatus } from "./shared/helper";
 import Sidebar from "./Sidebar";
 import axios from "axios";
 import SearchFilter from "./SearchFilter";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
 import CustomerOrderForm from "./CreatePurchaseOrder";
 import { Bounce, ToastContainer, toast } from "react-toastify";
+import useAuth from "./shared/userAuth";
 
 const PurchaseOrder = () => {
   const {
@@ -27,13 +28,38 @@ const PurchaseOrder = () => {
   });
   const [customerData, setCustomerData] = useState([]);
   const [productData, setProductData] = useState([]);
-  const { customerId } = useParams();
+  const { customerId, userId } = useParams();
+  const isAuthenticated = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated === false) {
+      navigate("/login");
+    }
+    fetchData();
+    getCustomerData();
+    getProductsData();
+  }, [customerId, isAuthenticated]);
 
   const fetchData = async () => {
     if (customerId) {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/customer/${customerId}`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "69420",
+            },
+          }
+        );
+        setResponseData(response.data.orders);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    } else if (userId) {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/user/${userId}`,
           {
             headers: {
               "ngrok-skip-browser-warning": "69420",
@@ -60,12 +86,6 @@ const PurchaseOrder = () => {
       }
     }
   };
-
-  useEffect(() => {
-    fetchData();
-    getCustomerData();
-    getProductsData();
-  }, [customerId]);
 
   const options = [
     { value: "initiated", label: "Initiated" },

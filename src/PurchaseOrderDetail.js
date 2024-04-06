@@ -3,13 +3,16 @@ import { formatDateTime, trimStatus } from "./shared/helper";
 import Sidebar from "./Sidebar";
 import axios from "axios";
 import SearchFilter from "./SearchFilter";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
+import useAuth from "./shared/userAuth";
 
 const PurchaseOrderDetail = () => {
   const [responseData, setResponseData] = useState();
   let { id, customerId } = useParams();
+  const isAuthenticated = useAuth();
+  const navigate = useNavigate();
 
   const {
     handleSubmit,
@@ -24,6 +27,13 @@ const PurchaseOrderDetail = () => {
     status: { value: "", label: "" },
     description: "",
   });
+
+  useEffect(() => {
+    if (isAuthenticated === false) {
+      navigate("/login");
+    }
+    fetchData();
+  }, [id, isAuthenticated]);
 
   const fetchData = async () => {
     try {
@@ -40,10 +50,6 @@ const PurchaseOrderDetail = () => {
       console.error("Error fetching product data:", error);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [id]);
 
   const options = [
     { value: "initiated", label: "Initiated" },

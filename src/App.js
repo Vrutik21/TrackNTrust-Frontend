@@ -1,5 +1,11 @@
+// App.js
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import "./style.scss";
 import ProductDetails from "./ProductDetail";
 import OrderHistory from "./OrderHistory";
@@ -12,13 +18,17 @@ import PurchaseOrderDetail from "./PurchaseOrderDetail";
 import LockerDetail from "./LockerDetail";
 import MapComponent from "./MapsGoogle";
 import CustomerPreference from "./CustomerPreference";
+import Login from "./Login";
+import Users from "./Users";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={<ProductDetails />} />
-        <Route path="/purchase-orders" element={<PurchaseOrder />} />
+        <Route path="/" element={<ProductDetails />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/purchase-orders/:userId?" element={<PurchaseOrder />} />
         <Route path="/purchase-orders/:id" element={<PurchaseOrderDetail />} />
         <Route
           path="/customers/:customerId/orders"
