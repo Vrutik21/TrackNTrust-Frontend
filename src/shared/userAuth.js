@@ -21,6 +21,7 @@ const useAuth = () => {
           {
             headers: {
               token: JSON.parse(userData).token,
+              "ngrok-skip-browser-warning": "69420",
             },
           }
         );

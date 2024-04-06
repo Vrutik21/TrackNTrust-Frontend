@@ -50,7 +50,12 @@ const CustomerPreference = () => {
   const getOrderDetails = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/purchase-order/${orderId}`
+        `${process.env.REACT_APP_BACKEND_URL}/purchase-order/${orderId}`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
       );
 
       setOrderData(response.data);
@@ -67,6 +72,11 @@ const CustomerPreference = () => {
         {
           delivery_time: timeRange,
           delivery_date: preferredDate,
+        },
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+          },
         }
       );
 

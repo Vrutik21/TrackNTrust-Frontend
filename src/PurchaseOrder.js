@@ -212,7 +212,12 @@ const PurchaseOrder = () => {
   const getCustomerData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/customer`
+        `${process.env.REACT_APP_BACKEND_URL}/customer`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
       );
 
       setCustomerData(response.data);
@@ -224,7 +229,12 @@ const PurchaseOrder = () => {
   const getProductsData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/product`
+        `${process.env.REACT_APP_BACKEND_URL}/product`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
       );
 
       setProductData(response.data);
@@ -248,6 +258,11 @@ const PurchaseOrder = () => {
           loc_lat: currentLocation.latitude,
           loc_lon: currentLocation.longitude,
           order_entries: formData?.order_entries,
+        },
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+          },
         }
       );
 

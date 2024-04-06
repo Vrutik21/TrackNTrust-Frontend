@@ -21,7 +21,11 @@ const Login = () => {
         password: data.Password,
       };
 
-      const response = await axios.post(url, credentials);
+      const response = await axios.post(url, credentials, {
+        headers: {
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
 
       if (response.data) {
         navigate("/");

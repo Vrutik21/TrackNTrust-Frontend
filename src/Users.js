@@ -81,6 +81,11 @@ const Users = () => {
           mobile: formData?.mobile,
           password: formData?.password,
           role: formData?.role.value,
+        },
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+          },
         }
       );
 
